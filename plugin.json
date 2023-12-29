@@ -1,0 +1,10 @@
+{
+    "id": "skillcraft/contact-manager",
+    "name": "Contact Manager",
+    "namespace": "Skillcraft\\ContactManager\\",
+    "provider": "Skillcraft\\ContactManager\\Providers\\ContactManagerServiceProvider",
+    "author": "William Troiano",
+    "url": "https://elegantmicrogreens.com",
+    "version": "1.0.0",
+    "description": "A simple contact manager plugin"
+}
