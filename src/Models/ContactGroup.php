@@ -3,7 +3,7 @@
 namespace Skillcraft\ContactManager\Models;
 
 use Illuminate\Support\Str;
-use Botble\Base\Models\BaseModel;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
 use Botble\Base\Enums\BaseStatusEnum;
 use Illuminate\Support\Facades\Schema;

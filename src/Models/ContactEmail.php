@@ -2,7 +2,7 @@
 
 namespace Skillcraft\ContactManager\Models;
 
-use Botble\Base\Models\BaseModel;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;

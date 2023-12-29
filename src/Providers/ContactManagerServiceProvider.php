@@ -15,7 +15,6 @@ class ContactManagerServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (defined('SKILLCRAFT_CORE_MODULE_SCREEN_NAME')) {
             $this
                 ->setNamespace('plugins/contact-manager')
                 ->loadHelpers()
@@ -80,6 +79,5 @@ class ContactManagerServiceProvider extends ServiceProvider
                         });
                 }
             });
-        }
     }
 }
