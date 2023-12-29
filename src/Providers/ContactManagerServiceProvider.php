@@ -15,14 +15,15 @@ class ContactManagerServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        $this
-            ->setNamespace('plugins/contact-manager')
-            ->loadHelpers()
-            ->loadAndPublishConfigurations(['permissions'])
-            ->loadMigrations()
-            ->loadAndPublishTranslations()
-            ->loadAndPublishViews()
-            ->loadRoutes();
+        if (defined('SKILLCRAFT_CORE_MODULE_SCREEN_NAME')) {
+            $this
+                ->setNamespace('plugins/contact-manager')
+                ->loadHelpers()
+                ->loadAndPublishConfigurations(['permissions'])
+                ->loadMigrations()
+                ->loadAndPublishTranslations()
+                ->loadAndPublishViews()
+                ->loadRoutes();
 
             DashboardMenu::default()->beforeRetrieving(function () {
                 DashboardMenu::make()->registerItem([
@@ -63,21 +64,22 @@ class ContactManagerServiceProvider extends ServiceProvider
                 ]);
             });
 
-        $this->app->booted(function () {
-            if (defined('CUSTOM_FIELD_MODULE_SCREEN_NAME')) {
-                CustomField::registerModule(ContactManager::class)
+            $this->app->booted(function () {
+                if (defined('CUSTOM_FIELD_MODULE_SCREEN_NAME')) {
+                    CustomField::registerModule(ContactManager::class)
                     ->registerRule('basic', trans('Contact'), ContactManager::class, function () {
                         return (new ContactManager())
                             ->query()
                             ->pluck(DB::raw("CONCAT(first_name, ' ', last_name)"), 'id')
                             ->toArray();
                     })
-                    ->expandRule('other', trans('plugins/custom-field::rules.model_name'), 'model_name', function () {
-                        return [
+                        ->expandRule('other', trans('plugins/custom-field::rules.model_name'), 'model_name', function () {
+                            return [
                             ContactManager::class => trans('Contacts'),
-                        ];
-                    });
-            }
-        });
+                            ];
+                        });
+                }
+            });
+        }
     }
 }
