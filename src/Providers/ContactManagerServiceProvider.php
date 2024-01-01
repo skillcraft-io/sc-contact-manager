@@ -2,12 +2,12 @@
 
 namespace Skillcraft\ContactManager\Providers;
 
-use Illuminate\Support\Facades\DB;
 use Botble\Base\Facades\DashboardMenu;
 use Botble\Base\Supports\ServiceProvider;
-use Botble\CustomField\Facades\CustomField;
+use Botble\Base\Facades\PanelSectionManager;
+use Botble\Base\PanelSections\PanelSectionItem;
 use Botble\Base\Traits\LoadAndPublishDataTrait;
-use Skillcraft\ContactManager\Models\ContactManager;
+use Skillcraft\Core\PanelSections\CorePanelSection;
 
 class ContactManagerServiceProvider extends ServiceProvider
 {
@@ -18,7 +18,7 @@ class ContactManagerServiceProvider extends ServiceProvider
             $this
                 ->setNamespace('plugins/contact-manager')
                 ->loadHelpers()
-                ->loadAndPublishConfigurations(['permissions'])
+                ->loadAndPublishConfigurations(['permissions', 'general'])
                 ->loadMigrations()
                 ->loadAndPublishTranslations()
                 ->loadAndPublishViews()
@@ -63,21 +63,23 @@ class ContactManagerServiceProvider extends ServiceProvider
                 ]);
             });
 
-            $this->app->booted(function () {
-                if (defined('CUSTOM_FIELD_MODULE_SCREEN_NAME')) {
-                    CustomField::registerModule(ContactManager::class)
-                    ->registerRule('basic', trans('Contact'), ContactManager::class, function () {
-                        return (new ContactManager())
-                            ->query()
-                            ->pluck(DB::raw("CONCAT(first_name, ' ', last_name)"), 'id')
-                            ->toArray();
-                    })
-                        ->expandRule('other', trans('plugins/custom-field::rules.model_name'), 'model_name', function () {
-                            return [
-                            ContactManager::class => trans('Contacts'),
-                            ];
-                        });
-                }
+
+            PanelSectionManager::default()->beforeRendering(function () {
+                PanelSectionManager::registerItem(
+                    CorePanelSection::class,
+                    fn () => PanelSectionItem::make('contact-manager')
+                        ->setTitle(trans('plugins/contact-manager::contact-manager.settings.title'))
+                        ->withIcon('ti ti-user-plus')
+                        ->withDescription(trans('plugins/contact-manager::contact-manager.settings.description'))
+                        ->withPriority(1)
+                        ->withRoute('contact-manager.settings')
+                );
             });
+
+            $this->app->booted(function () {
+                $this->app->register(HookServiceProvider::class);
+            });
+
+            $this->app->register(EventServiceProvider::class);
     }
 }

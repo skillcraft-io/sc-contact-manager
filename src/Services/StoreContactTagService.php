@@ -40,7 +40,7 @@ class StoreContactTagService extends StoreContactTagServiceAbstract
 
                     $request->merge(['slug' => $tagName]);
 
-                    event(new CreatedContentEvent(CONTACT_TAG_MODULE_SCREEN_NAME, $request, $tag));
+                    event(new CreatedContentEvent(CONTACT_MANAGER_TAG_MODULE_SCREEN_NAME, $request, $tag));
                 }
 
                 if (!empty($tag)) {

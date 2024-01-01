@@ -3,6 +3,11 @@
 return [
     'name' => 'Contact Manager',
     'create' => 'New Contact',
+    'settings' => [
+        'title' => 'Contact Manager',
+        'description' => 'Contact Manager Plugin Settings',
+        'contact-form' => 'Enable Contact Form Import',
+    ],
     'models' => [
         'phone' => [
             'name' => 'Contact Phone',

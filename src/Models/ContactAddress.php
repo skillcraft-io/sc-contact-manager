@@ -4,7 +4,6 @@ namespace Skillcraft\ContactManager\Models;
 
 use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
-use Botble\Base\Enums\BaseStatusEnum;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\SoftDeletes;

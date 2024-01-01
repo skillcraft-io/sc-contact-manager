@@ -10,6 +10,7 @@ use Botble\Table\Columns\IdColumn;
 use Illuminate\Support\Facades\DB;
 use Botble\Base\Facades\BaseHelper;
 use Botble\Table\Actions\EditAction;
+use Botble\Table\Columns\EnumColumn;
 use Botble\Table\Columns\NameColumn;
 use Illuminate\Support\Facades\Auth;
 use Botble\Base\Enums\BaseStatusEnum;
@@ -18,11 +19,12 @@ use Botble\Table\Columns\StatusColumn;
 use Botble\Table\Abstracts\TableAbstract;
 use Botble\Table\Columns\CreatedAtColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Botble\Table\BulkActions\DeleteBulkAction;
 use Skillcraft\ContactManager\Models\ContactTag;
 use Skillcraft\ContactManager\Models\ContactGroup;
-use Botble\Table\BulkActions\DeleteBulkAction;
-use Skillcraft\ContactManager\Models\ContactManager;
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Skillcraft\ContactManager\Enums\ContactTypeEnum;
+use Skillcraft\ContactManager\Models\ContactManager;
 use Illuminate\Database\Query\Builder as QueryBuilder;
 
 class ContactManagerTable extends TableAbstract
@@ -62,6 +64,9 @@ class ContactManagerTable extends TableAbstract
                'id',
                'first_name',
                'last_name',
+               'business_name',
+               'type',
+               'source',
                'created_at',
            ]);
 
@@ -71,9 +76,11 @@ class ContactManagerTable extends TableAbstract
     public function columns(): array
     {
         return [
-            IdColumn::make(),
             Column::make('first_name'),
             Column::make('last_name'),
+            Column::make('business_name'),
+            EnumColumn::make('type'),
+            Column::make('source'),
             CreatedAtColumn::make(),
         ];
     }
@@ -87,27 +94,6 @@ class ContactManagerTable extends TableAbstract
     {
         return [
             DeleteBulkAction::make()->permission('contact-manager.destroy'),
-        ];
-    }
-
-    public function getBulkChanges(): array
-    {
-        return [
-            'name' => [
-                'title' => trans('core/base::tables.name'),
-                'type' => 'text',
-                'validate' => 'required|max:120',
-            ],
-            'status' => [
-                'title' => trans('core/base::tables.status'),
-                'type' => 'select',
-                'choices' => BaseStatusEnum::labels(),
-                'validate' => 'required|in:' . implode(',', BaseStatusEnum::values()),
-            ],
-            'created_at' => [
-                'title' => trans('core/base::tables.created_at'),
-                'type' => 'date',
-            ],
         ];
     }
 
@@ -130,8 +116,39 @@ class ContactManagerTable extends TableAbstract
                 'validate' => 'required|integer',
                 'choices'  => ['0' => trans('plugins/contacts-manager::contacts-manager.no_group')] + (new ContactGroup())->query()->pluck('name', 'id')->toArray(),
             ],
+           
+            'contact_addresses.address' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.address'),
+                'type'     => 'text',
+                'validate' => 'required|string',
+            ],
+            'contact_addresses.address2' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.address2'),
+                'type'     => 'text',
+                'validate' => 'required|string',
+            ],
+            'contact_addresses.city' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.city'),
+                'type'     => 'text',
+                'validate' => 'required|string',
+            ],
             'contact_addresses.state' => [
                 'title'    => trans('plugins/contact-manager::contact-manager.forms.state'),
+                'type'     => 'text',
+                'validate' => 'required|string',
+            ],
+            'contact_addresses.postalcode' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.postalcode'),
+                'type'     => 'text',
+                'validate' => 'required|string',
+            ],
+            'contact_phones.phone' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.phone'),
+                'type'     => 'text',
+                'validate' => 'required|string',
+            ],
+            'contact_emails.email' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.email'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
@@ -143,6 +160,17 @@ class ContactManagerTable extends TableAbstract
                     ->query()
                     ->pluck('name', 'id')
                     ->toArray(),
+            ],
+            'contact_manager.type' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.type'),
+                'type'     => 'select-search',
+                'validate' => 'required|in:' . implode(',', ContactTypeEnum::values()),
+                'choices'  => ContactTypeEnum::labels(),
+            ],
+            'contact_manager.source' => [
+                'title'    => trans('plugins/contact-manager::contact-manager.forms.source'),
+                'type'     => 'text',
+                'validate' => 'required|string',
             ],
         ];
     }
@@ -158,39 +186,32 @@ class ContactManagerTable extends TableAbstract
 
     public function applyFilterCondition($query, string $key, string $operator, ?string $value)
     {
-        if (strpos($key, '.') !== -1) {
-            $key = Arr::last(explode('.', $key));
-        }
+       
+        if (!empty($value)) {
+            if ($operator === 'like') {
+                $value = '%'.$value.'%';
+            }
 
-        switch ($key) {
-            case 'contact_addresses.state':
-            case 'contact_addresses.address':
-            case 'contact_addresses.address2':
-            case 'contact_addresses.postalcode':
-            case 'contact_addresses.city':
-                if (!$value) {
+            switch ($key) {
+                case 'contact_addresses.state':
+                case 'contact_addresses.address':
+                case 'contact_addresses.address2':
+                case 'contact_addresses.postalcode':
+                case 'contact_addresses.city':
+                    $query = $query->HasAddressInfo($key, $operator, $value);
                     break;
-                }
-
-                if ($operator === 'like') {
-                    $value = '%'.$value.'%';
-                }
-            
-                $query = $query->whereHas('address_info', function (Builder $query) use ($key, $operator, $value) {
-                    $query->where('contact_addresses.'.$key, $operator, $value);
-                });
-
-                break;
-            case 'contact_tags':
-                    $query = $query->whereExists(function ($query) use ($operator, $value) {
-                        $query->select(DB::raw(1))
-                              ->from('contacts_tags')
-                              ->whereRaw('contact_manager.id = contacts_tags.contact_id')
-                              ->where('contacts_tags.tag_id', $operator, $value);
-                    });
-                break;
-            default:
-                $query = parent::applyFilterCondition($query, $key, $operator, $value);
+                case 'contact_emails.email':
+                    $query = $query->HasEmailInfo($key, $operator, $value);
+                    break;
+                case 'contact_phones.phone':
+                    $query = $query->HasPhoneInfo($key, $operator, $value);
+                    break;
+                case 'contact_tags':
+                    $query = $query->HasContactTag($operator, $value);
+                    break;
+                default:
+                    $query = parent::applyFilterCondition($query, $key, $operator, $value);
+            }
         }
 
         return $query;

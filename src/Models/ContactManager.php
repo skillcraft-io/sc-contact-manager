@@ -3,14 +3,14 @@
 namespace Skillcraft\ContactManager\Models;
 
 use Illuminate\Support\Str;
-use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
-use Botble\Base\Enums\BaseStatusEnum;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Skillcraft\ContactManager\Enums\ContactTypeEnum;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -35,7 +35,6 @@ class ContactManager extends BaseModel
     ];
 
     protected $casts = [
-        'status' => BaseStatusEnum::class,
         'name' => SafeContent::class,
         'type' => ContactTypeEnum::class,
         'source' => SafeContent::class,
@@ -48,6 +47,12 @@ class ContactManager extends BaseModel
 
         static::creating(function ($contact) {
             $contact->uuid = (string) Str::orderedUuid();
+        });
+
+        static::deleted(function ($contact) {
+            $contact->phones()->delete();
+            $contact->emails()->delete();
+            $contact->addresses()->delete();
         });
     }
 
@@ -113,5 +118,41 @@ class ContactManager extends BaseModel
         return Attribute::make(
             get: fn (string $value) => $this->firstName . ' ' . $this->lastName,
         );
+    }
+    
+    public function scopeHasType($query, ContactTypeEnum $type): Builder
+    {
+        return $query->where('type', $type->getKey());
+    }
+
+    public function scopeHasAddressInfo($query, string $key, string $operator, string $value): Builder
+    {
+        return  $query = $query->whereHas('addresses', function (Builder $query) use ($key, $operator, $value) {
+            $query->where($key, $operator, $value);
+        });
+    }
+
+    public function scopeHasEmailInfo($query, string $key, string $operator, string $value): Builder
+    {
+        return  $query = $query->whereHas('emails', function (Builder $query) use ($key, $operator, $value) {
+            $query->where($key, $operator, $value);
+        });
+    }
+
+    public function scopeHasPhoneInfo($query, string $key, string $operator, string $value): Builder
+    {
+        return  $query = $query->whereHas('phones', function (Builder $query) use ($key, $operator, $value) {
+            $query->where($key, $operator, $value);
+        });
+    }
+
+    public function scopeHasContactTag($query, string $operator, string $value): Builder
+    {
+        return $query->whereExists(function ($query) use ($operator, $value) {
+            $query->select(DB::raw(1))
+                  ->from('contacts_tags')
+                  ->whereRaw('contact_manager.id = contacts_tags.contact_id')
+                  ->where('contacts_tags.tag_id', $operator, $value);
+        });
     }
 }

@@ -6,6 +6,11 @@ return [
         'flag' => 'contact-manager.index',
     ],
     [
+        'name' => 'Contact Settings',
+        'flag' => 'contact-manager.settings',
+        'parent_flag' => 'contact-manager.index',
+    ],
+    [
         'name' => 'Create',
         'flag' => 'contact-manager.create',
         'parent_flag' => 'contact-manager.index',

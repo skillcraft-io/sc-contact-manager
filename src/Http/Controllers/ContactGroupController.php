@@ -36,7 +36,7 @@ class ContactGroupController extends BaseController
     {
         $contactGroup = ContactGroup::query()->create($request->input());
 
-        event(new CreatedContentEvent(CONTACT_GROUP_MODULE_SCREEN_NAME, $request, $contactGroup));
+        event(new CreatedContentEvent(CONTACT_MANAGER_GROUP_MODULE_SCREEN_NAME, $request, $contactGroup));
 
         return $response
             ->setPreviousUrl(route('contact-group.index'))
@@ -57,7 +57,7 @@ class ContactGroupController extends BaseController
 
         $contactGroup->save();
 
-        event(new UpdatedContentEvent(CONTACT_GROUP_MODULE_SCREEN_NAME, $request, $contactGroup));
+        event(new UpdatedContentEvent(CONTACT_MANAGER_GROUP_MODULE_SCREEN_NAME, $request, $contactGroup));
 
         return $response
             ->setPreviousUrl(route('contact-group.index'))
@@ -69,7 +69,7 @@ class ContactGroupController extends BaseController
         try {
             $contactGroup->delete();
 
-            event(new DeletedContentEvent(CONTACT_GROUP_MODULE_SCREEN_NAME, $request, $contactGroup));
+            event(new DeletedContentEvent(CONTACT_MANAGER_GROUP_MODULE_SCREEN_NAME, $request, $contactGroup));
 
             return $response->setMessage(trans('core/base::notices.delete_success_message'));
         } catch (Exception $exception) {

@@ -2,9 +2,9 @@
 
 namespace Skillcraft\ContactManager\Enums;
 
+use Botble\Base\Facades\Html;
 use Botble\Base\Supports\Enum;
-
-use Html;
+use Illuminate\Support\HtmlString;
 
 /**
  * @method static ContactDataTypeEnum CUSTOMER()
@@ -20,14 +20,14 @@ class ContactTypeEnum extends Enum
      */
     public static $langPath = 'plugins/contact-manager::enums.contact_type';
 
-    /**
-     * @return string
-     */
-    public function toHtml()
+    public function toHtml(): HtmlString|string
     {
-        switch ($this->value) {
-            default:
-                return $this->value;
-        }
+        return match ($this->value) {
+            self::CUSTOMER => Html::tag('span', self::CUSTOMER()->label(), ['class' => 'label-success status-label'])
+                ->toHtml(),
+            self::LEAD => Html::tag('span', self::LEAD()->label(), ['class' => 'label-info status-label'])
+                ->toHtml(),
+            default => parent::toHtml(),
+        };
     }
 }

@@ -24,5 +24,19 @@ Route::group(['namespace' => 'Skillcraft\ContactManager\Http\Controllers', 'midd
         Route::group(['prefix' => 'contact-groups', 'as' => 'contact-group.'], function () {
             Route::resource('', 'ContactGroupController')->parameters(['' => 'contact-group']);
         });
+
+        Route::group(['prefix' => 'settings'], function () {
+            Route::get('contact-manager', [
+                'as' => 'contact-manager.settings',
+                'uses' => 'Settings\ContactManagerSettingController@edit',
+                'permission' => 'contact-manager.settings',
+            ]);
+
+            Route::put('contact-manager', [
+                'as' => 'contact.settings.update',
+                'uses' => 'Settings\ContactManagerSettingController@update',
+                'permission' => 'contact-manager.settings',
+            ]);
+        });
     });
 });

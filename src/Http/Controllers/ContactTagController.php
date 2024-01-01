@@ -43,7 +43,7 @@ class ContactTagController extends BaseController
         
         $contactTag = ContactTag::query()->create($request->input());
 
-        event(new CreatedContentEvent(CONTACT_TAG_MODULE_SCREEN_NAME, $request, $contactTag));
+        event(new CreatedContentEvent(CONTACT_MANAGER_TAG_MODULE_SCREEN_NAME, $request, $contactTag));
 
         return $response
             ->setPreviousUrl(route('contact-tag.index'))
@@ -64,7 +64,7 @@ class ContactTagController extends BaseController
 
         $contactTag->save();
 
-        event(new UpdatedContentEvent(CONTACT_TAG_MODULE_SCREEN_NAME, $request, $contactTag));
+        event(new UpdatedContentEvent(CONTACT_MANAGER_TAG_MODULE_SCREEN_NAME, $request, $contactTag));
 
         return $response
             ->setPreviousUrl(route('contact-tag.index'))
@@ -76,7 +76,7 @@ class ContactTagController extends BaseController
         try {
             $contactTag->delete();
 
-            event(new DeletedContentEvent(CONTACT_TAG_MODULE_SCREEN_NAME, $request, $contactTag));
+            event(new DeletedContentEvent(CONTACT_MANAGER_TAG_MODULE_SCREEN_NAME, $request, $contactTag));
 
             return $response->setMessage(trans('core/base::notices.delete_success_message'));
         } catch (Exception $exception) {
