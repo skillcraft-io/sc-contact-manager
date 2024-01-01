@@ -10,7 +10,10 @@ Allows for adding and simple management of contacts and leads.
 
 **Install via Admin Panel**
 
+**REQUIRED** To install you must first install and activate the [Skillcraft Core](https://github.com/skillcraft-io/skillcraft-core). Plugin.
+
 Go to the **Admin Panel** and click on the **Plugins** tab. Click on the "Add new" button, find the **Contact Manager** plugin and click on the "Install" button.
+
 
 **Install manually**
 

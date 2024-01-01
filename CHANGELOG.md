@@ -11,7 +11,7 @@ All notable changes to the Contact Manager plugin will be documented in this fil
 - [Enhancement] Added filters to search contacts
 
 ### Changed
-- [Update] Requires the Skillcraft Core Plugin [Skillcraft Core](https://github.comskillcraft-io/skillcraft-core).
+- [Update] Requires the Skillcraft Core Plugin [Skillcraft Core](https://github.com/skillcraft-io/skillcraft-core).
 - [Update] Removed contact UUID
 - [Update] Code Optimizations
 
