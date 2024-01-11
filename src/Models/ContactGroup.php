@@ -30,9 +30,9 @@ class ContactGroup extends BaseModel
         'name' => SafeContent::class,
     ];
 
-    protected static function booted()
+    protected static function booted():void
     {
-        parent::boot();
+        parent::booted();
 
         static::creating(function ($group) {
             $group->uuid = (string) Str::orderedUuid();

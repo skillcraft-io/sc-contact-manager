@@ -25,7 +25,6 @@ class ContactManager extends BaseModel
     protected $table = 'contact_manager';
 
     protected $fillable = [
-        'uuid',
         'group_id',
         'first_name',
         'last_name',
@@ -44,11 +43,7 @@ class ContactManager extends BaseModel
     protected static function booted()
     {
         parent::boot();
-
-        static::creating(function ($contact) {
-            $contact->uuid = (string) Str::orderedUuid();
-        });
-
+        
         static::deleted(function ($contact) {
             $contact->phones()->delete();
             $contact->emails()->delete();
