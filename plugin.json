@@ -7,5 +7,5 @@
     "url": "https://github.com/skillcraft-io",
     "version": "1.1.1",
     "description": "A simple contact manager plugin",
-    "required": ["skillcraft/skillcraft-core"]
+    "require": ["skillcraft/skillcraft-core"]
 }
