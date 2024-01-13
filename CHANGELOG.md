@@ -2,6 +2,9 @@
 
 All notable changes to the Contact Manager plugin will be documented in this file, from latest change to the oldest.
 
+## [1.1.2] - 2024-01-13
+- [Bug] - [Merge] (https://github.com/skillcraft-io/contact-manager/pull/4)
+
 ## [1.1.1] - 2024-01-10
 - [Bug] - [UUID Error] (https://github.com/skillcraft-io/contact-manager/issues/3)
 - [Misc] - Housekeeping items.
