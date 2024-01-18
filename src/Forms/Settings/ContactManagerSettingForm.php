@@ -14,14 +14,14 @@ class ContactManagerSettingForm extends SettingForm
         parent::setup();
 
         $this
-            ->setSectionTitle(trans('plugins/contact-manager::contact-manager.settings.title'))
-            ->setSectionDescription(trans('plugins/contact-manager::contact-manager.settings.description'))
+            ->setSectionTitle(trans('plugins/sc-contact-manager::contact-manager.settings.title'))
+            ->setSectionDescription(trans('plugins/sc-contact-manager::contact-manager.settings.description'))
             ->setValidatorClass(ContactManagerSettingRequest::class)
             ->add(
                 'sc-cm-contact-form',
                 OnOffField::class,
                 OnOffFieldOption::make()
-                    ->label(trans('plugins/contact-manager::contact-manager.settings.contact-form'))
+                    ->label(trans('plugins/sc-contact-manager::contact-manager.settings.contact-form'))
                     ->value(setting('sc-cm-contact-form', config('plugins.contact-manager.general.contact_sources.contact_form', false)))
                     ->toArray()
             );

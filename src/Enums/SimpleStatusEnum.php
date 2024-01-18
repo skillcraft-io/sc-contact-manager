@@ -16,7 +16,7 @@ class SimpleStatusEnum extends Enum
     /**
      * @var string
      */
-    public static $langPath = 'plugins/contact-manager::enums.simple_status';
+    public static $langPath = 'plugins/sc-contact-manager::enums.simple_status';
 
     /**
      * @return string

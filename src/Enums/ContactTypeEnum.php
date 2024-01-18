@@ -18,7 +18,7 @@ class ContactTypeEnum extends Enum
     /**
      * @var string
      */
-    public static $langPath = 'plugins/contact-manager::enums.contact_type';
+    public static $langPath = 'plugins/sc-contact-manager::enums.contact_type';
 
     public function toHtml(): HtmlString|string
     {

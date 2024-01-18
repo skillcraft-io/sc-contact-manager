@@ -22,14 +22,14 @@ class ContactManagerController extends BaseController
 {
     public function index(ContactManagerTable $table)
     {
-        PageTitle::setTitle(trans('plugins/contact-manager::contact-manager.name'));
+        PageTitle::setTitle(trans('plugins/sc-contact-manager::contact-manager.name'));
 
         return $table->renderTable();
     }
 
     public function create(FormBuilder $formBuilder)
     {
-        PageTitle::setTitle(trans('plugins/contact-manager::contact-manager.create'));
+        PageTitle::setTitle(trans('plugins/sc-contact-manager::contact-manager.create'));
 
         return $formBuilder->create(ContactManagerForm::class)->renderForm();
     }

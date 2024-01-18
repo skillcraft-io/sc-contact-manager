@@ -15,12 +15,16 @@ class ContactManagerServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        if (! is_plugin_active('skillcraft-core')) {
+        if (is_plugin_active('skillcraft-core') || is_plugin_active('contact-manager')) {
             return;
         }
 
+        if (! is_plugin_active('sc-core')) {
+            return;
+        }
+        
         $this
-            ->setNamespace('plugins/contact-manager')
+            ->setNamespace('plugins/sc-contact-manager')
             ->loadHelpers()
             ->loadAndPublishConfigurations(['permissions', 'general'])
             ->loadMigrations()
@@ -33,7 +37,7 @@ class ContactManagerServiceProvider extends ServiceProvider
                 'id' => 'cms-plugins-contact-manager',
                 'priority' => 1,
                 'parent_id' => null,
-                'name' => 'plugins/contact-manager::contact-manager.name',
+                'name' => 'plugins/sc-contact-manager::contact-manager.name',
                 'icon' => 'ti ti-user-plus',
                 'url' => null,
                 'permissions' => [],
@@ -42,7 +46,7 @@ class ContactManagerServiceProvider extends ServiceProvider
                     'id' => 'cms-plugins-contact-manager-2',
                     'priority' => 0,
                     'parent_id' => 'cms-plugins-contact-manager',
-                    'name' => 'plugins/contact-manager::contact-manager.name',
+                    'name' => 'plugins/sc-contact-manager::contact-manager.name',
                     'icon' => null,
                     'url' => route('contact-manager.index'),
                     'permissions' => ['contact-manager.index'],
@@ -51,7 +55,7 @@ class ContactManagerServiceProvider extends ServiceProvider
                     'id' => 'cms-plugins-contact-manager.models.tag',
                     'priority' => 0,
                     'parent_id' => 'cms-plugins-contact-manager',
-                    'name' => 'plugins/contact-manager::contact-manager.models.tag.name',
+                    'name' => 'plugins/sc-contact-manager::contact-manager.models.tag.name',
                     'icon' => null,
                     'url' => route('contact-tag.index'),
                     'permissions' => ['contact-tag.index'],
@@ -60,7 +64,7 @@ class ContactManagerServiceProvider extends ServiceProvider
                     'id' => 'cms-plugins-contact-manager.models.group',
                     'priority' => 0,
                     'parent_id' => 'cms-plugins-contact-manager',
-                    'name' => 'plugins/contact-manager::contact-manager.models.group.name',
+                    'name' => 'plugins/sc-contact-manager::contact-manager.models.group.name',
                     'icon' => null,
                     'url' => route('contact-group.index'),
                     'permissions' => ['contact-group.index'],
@@ -71,9 +75,9 @@ class ContactManagerServiceProvider extends ServiceProvider
             PanelSectionManager::registerItem(
                 CorePanelSection::class,
                 fn() => PanelSectionItem::make('contact-manager')
-                    ->setTitle(trans('plugins/contact-manager::contact-manager.settings.title'))
+                    ->setTitle(trans('plugins/sc-contact-manager::contact-manager.settings.title'))
                     ->withIcon('ti ti-user-plus')
-                    ->withDescription(trans('plugins/contact-manager::contact-manager.settings.description'))
+                    ->withDescription(trans('plugins/sc-contact-manager::contact-manager.settings.description'))
                     ->withPriority(1)
                     ->withRoute('contact-manager.settings')
             );

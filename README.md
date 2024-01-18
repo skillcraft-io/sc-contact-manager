@@ -5,12 +5,17 @@ Allows for adding and simple management of contacts and leads.
 ## Requirements
 
 - Botble core 7.0.0 or higher.
+- Skillcraft Core (sc-core) v2.0.0 or higher
 
 ## Installation
 
 **Install via Admin Panel**
 
-**REQUIRED** To install you must first install and activate the [Skillcraft Core](https://github.com/skillcraft-io/skillcraft-core). Plugin.
+- Important:
+  "You need to disable the "Contact Manager" plugin if previously installed. This new release of the plugin has renmaed the folder to "sc-contact-manager". 
+  
+  ##Do not use## the plugins remove button from the admin area, manually remove the folder and contents directly from the server. If you do not have any data, you can use the remove button.
+
 
 Go to the **Admin Panel** and click on the **Plugins** tab. Click on the "Add new" button, find the **Contact Manager** plugin and click on the "Install" button.
 

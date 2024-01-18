@@ -101,59 +101,59 @@ class ContactManagerTable extends TableAbstract
     {
         return [
             'contact_manager.first_name' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.first_name'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.first_name'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_manager.last_name' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.last_name'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.last_name'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_manager.group_id' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.group'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.group'),
                 'type'     => 'select',
                 'validate' => 'required|integer',
                 'choices'  => ['0' => trans('plugins/contacts-manager::contacts-manager.no_group')] + (new ContactGroup())->query()->pluck('name', 'id')->toArray(),
             ],
            
             'contact_addresses.address' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.address'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.address'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_addresses.address2' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.address2'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.address2'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_addresses.city' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.city'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.city'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_addresses.state' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.state'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.state'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_addresses.postalcode' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.postalcode'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.postalcode'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_phones.phone' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.phone'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.phone'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_emails.email' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.email'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.email'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],
             'contact_tags' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.tag'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.tag'),
                 'type'     => 'select-search',
                 'validate' => 'required|integer',
                 'choices'  => (new ContactTag())
@@ -162,13 +162,13 @@ class ContactManagerTable extends TableAbstract
                     ->toArray(),
             ],
             'contact_manager.type' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.type'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.type'),
                 'type'     => 'select-search',
                 'validate' => 'required|in:' . implode(',', ContactTypeEnum::values()),
                 'choices'  => ContactTypeEnum::labels(),
             ],
             'contact_manager.source' => [
-                'title'    => trans('plugins/contact-manager::contact-manager.forms.source'),
+                'title'    => trans('plugins/sc-contact-manager::contact-manager.forms.source'),
                 'type'     => 'text',
                 'validate' => 'required|string',
             ],

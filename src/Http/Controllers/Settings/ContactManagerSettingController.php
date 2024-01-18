@@ -11,7 +11,7 @@ class ContactManagerSettingController extends SettingController
 {
     public function edit()
     {
-        $this->pageTitle(trans('plugins/contact-manager::contact-manager.settings.title'));
+        $this->pageTitle(trans('plugins/sc-contact-manager::contact-manager.settings.title'));
 
         return ContactManagerSettingForm::create()->renderForm();
     }

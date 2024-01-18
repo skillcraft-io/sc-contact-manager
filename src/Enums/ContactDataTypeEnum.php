@@ -22,7 +22,7 @@ class ContactDataTypeEnum extends Enum
     /**
      * @var string
      */
-    public static $langPath = 'plugins/contact-manager::enums.contact_status';
+    public static $langPath = 'plugins/sc-contact-manager::enums.contact_status';
 
     /**
      * @return string

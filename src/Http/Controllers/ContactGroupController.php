@@ -20,14 +20,14 @@ class ContactGroupController extends BaseController
 {
     public function index(ContactGroupTable $table)
     {
-        PageTitle::setTitle(trans('plugins/contact-manager::contact-manager.models.group.name'));
+        PageTitle::setTitle(trans('plugins/sc-contact-manager::contact-manager.models.group.name'));
 
         return $table->renderTable();
     }
 
     public function create(FormBuilder $formBuilder)
     {
-        PageTitle::setTitle(trans('plugins/contact-manager::contact-manager.models.create'));
+        PageTitle::setTitle(trans('plugins/sc-contact-manager::contact-manager.models.create'));
 
         return $formBuilder->create(ContactGroupForm::class)->renderForm();
     }
