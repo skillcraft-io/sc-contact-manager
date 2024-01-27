@@ -2,21 +2,21 @@
 
 namespace Skillcraft\ContactManager\Models;
 
-use Illuminate\Support\Str;
-use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
 use Botble\Base\Enums\BaseStatusEnum;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 
 /**
- * @method static \Skillcraft\Base\Models\BaseQueryBuilder<static> query()
+ * @method static \Botble\Base\Models\BaseQueryBuilder<static> query()
  */
 class ContactGroup extends BaseModel
 {
     use SoftDeletes;
-    
+
     protected $table = 'contact_groups';
 
     protected $fillable = [
@@ -30,7 +30,7 @@ class ContactGroup extends BaseModel
         'name' => SafeContent::class,
     ];
 
-    protected static function booted():void
+    protected static function booted(): void
     {
         parent::booted();
 
