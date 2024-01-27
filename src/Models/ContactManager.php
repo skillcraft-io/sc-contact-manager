@@ -2,21 +2,21 @@
 
 namespace Skillcraft\ContactManager\Models;
 
-use Illuminate\Support\Str;
 use Botble\Base\Casts\SafeContent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Skillcraft\Core\Models\CoreModel as BaseModel;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Skillcraft\ContactManager\Enums\ContactTypeEnum;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 
 /**
- * @method static \Skillcraft\Base\Models\BaseQueryBuilder<static> query()
+ * @method static \Botble\Base\Models\BaseQueryBuilder<static> query()
  */
 class ContactManager extends BaseModel
 {
@@ -30,20 +30,18 @@ class ContactManager extends BaseModel
         'last_name',
         'business_name',
         'type',
-        'source'
+        'source',
     ];
 
     protected $casts = [
         'name' => SafeContent::class,
         'type' => ContactTypeEnum::class,
         'source' => SafeContent::class,
-        'business_name' => SafeContent::class
+        'business_name' => SafeContent::class,
     ];
 
-    protected static function booted()
+    protected static function booted(): void
     {
-        parent::boot();
-        
         static::deleted(function ($contact) {
             $contact->phones()->delete();
             $contact->emails()->delete();
@@ -51,7 +49,7 @@ class ContactManager extends BaseModel
         });
     }
 
-    public function modelInstallSchema():void
+    public function modelInstallSchema(): void
     {
         Schema::create($this->getTable(), function (Blueprint $table) {
             $table->id();
@@ -72,22 +70,22 @@ class ContactManager extends BaseModel
         return $this->belongsToMany(ContactTag::class, 'contacts_tags', 'contact_id', 'tag_id');
     }
 
-    public function group()
+    public function group(): HasOne
     {
         return $this->hasOne(ContactGroup::class, 'id', 'group_id');
     }
 
-    public function addresses():HasMany
+    public function addresses(): HasMany
     {
         return $this->hasMany(ContactAddress::class, 'contact_id', 'id');
     }
 
-    public function emails():HasMany
+    public function emails(): HasMany
     {
         return $this->hasMany(ContactEmail::class, 'contact_id', 'id');
     }
 
-    public function phones():HasMany
+    public function phones(): HasMany
     {
         return $this->hasMany(ContactPhone::class, 'contact_id', 'id');
     }
@@ -114,7 +112,7 @@ class ContactManager extends BaseModel
             get: fn (string $value) => $this->firstName . ' ' . $this->lastName,
         );
     }
-    
+
     public function scopeHasType($query, ContactTypeEnum $type): Builder
     {
         return $query->where('type', $type->getKey());

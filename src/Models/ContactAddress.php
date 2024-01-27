@@ -2,16 +2,16 @@
 
 namespace Skillcraft\ContactManager\Models;
 
-use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 use Skillcraft\ContactManager\Enums\ContactDataTypeEnum;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 
 /**
- * @method static \Skillcraft\Base\Models\BaseQueryBuilder<static> query()
+ * @method static \Botble\Base\Models\BaseQueryBuilder<static> query()
  */
 class ContactAddress extends BaseModel
 {
@@ -35,7 +35,7 @@ class ContactAddress extends BaseModel
         'address2' => SafeContent::class,
         'city' => SafeContent::class,
         'state' => SafeContent::class,
-        'postalcode' => SafeContent::class
+        'postalcode' => SafeContent::class,
     ];
 
     public function modelInstallSchema(): void
@@ -55,7 +55,7 @@ class ContactAddress extends BaseModel
         });
     }
 
-    public function contact():BelongsTo
+    public function contact(): BelongsTo
     {
         return $this->belongsTo(ContactManager::class);
     }

@@ -2,16 +2,15 @@
 
 namespace Skillcraft\ContactManager\Models;
 
-use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
-use Botble\Base\Enums\BaseStatusEnum;
-use Illuminate\Support\Facades\Schema;
 use Botble\Base\Supports\Database\Blueprint;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Schema;
 use Skillcraft\ContactManager\Enums\ContactDataTypeEnum;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 
 /**
- * @method static \Skillcraft\Base\Models\BaseQueryBuilder<static> query()
+ * @method static \Botble\Base\Models\BaseQueryBuilder<static> query()
  */
 class ContactPhone extends BaseModel
 {
@@ -41,7 +40,7 @@ class ContactPhone extends BaseModel
         });
     }
 
-    public function contact():BelongsTo
+    public function contact(): BelongsTo
     {
         return $this->belongsTo(ContactManager::class);
     }

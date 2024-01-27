@@ -3,15 +3,15 @@
 namespace Skillcraft\ContactManager\Models;
 
 use Botble\ACL\Models\User;
-use Skillcraft\Core\Models\CoreModel as BaseModel;
 use Botble\Base\Casts\SafeContent;
 use Botble\Base\Enums\BaseStatusEnum;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+use Skillcraft\Core\Models\CoreModel as BaseModel;
 
 /**
- * @method static \Skillcraft\Base\Models\BaseQueryBuilder<static> query()
+ * @method static \Botble\Base\Models\BaseQueryBuilder<static> query()
  */
 class ContactTag extends BaseModel
 {
@@ -50,10 +50,8 @@ class ContactTag extends BaseModel
         return $this->belongsToMany(ContactManager::class, 'contacts_tags', 'id', 'contact_id');
     }
 
-    protected static function boot()
+    protected static function booted(): void
     {
-        parent::boot();
-
         self::deleting(function (ContactTag $tag) {
             $tag->contacts()->detach();
         });
